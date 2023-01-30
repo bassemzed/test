@@ -5,7 +5,7 @@ const Post = require('../../models/Post');
 const { check, validationResult } = require('express-validator');
 
 //create a post
-router.post('/', [auth, [
+router.post('/add', [auth, [
     check('text', 'text is required').not().isEmpty(),
     check('image', 'image are required').not().isEmpty()
 ]],
@@ -31,7 +31,7 @@ router.post('/', [auth, [
         res.send(post);
     });
 //get post by its id
-router.get('/:id', async (req, res) => {
+router.get('/getone/:id', async (req, res) => {
     try {
         const post = await Post.findOne({ _id: req.params.id })
         if (!post) return res.status(400).json({ msg: 'there is no posts with this id' });
@@ -42,7 +42,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 //delete post by its id
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/delete/:id', auth, async (req, res) => {
     try {
         //delete USER 
         const p = await Post.findOne({ _id: req.params.id })
@@ -57,7 +57,7 @@ router.delete('/:id', auth, async (req, res) => {
     }
 });
 //update post by its id
-router.put('/:id', [auth, [
+router.put('/update/:id', [auth, [
     check('text', 'text is required').not().isEmpty(),
     check('image', 'image are required').not().isEmpty()
 ]],
@@ -94,7 +94,7 @@ router.put('/:id', [auth, [
     });
 
 //all the posts 
-router.get('/all/', async (req, res) => {
+router.get('/total/', async (req, res) => {
     try {
         const post = await Post.countDocuments()
         if (!post) return res.status(400).json({ msg: 'there is no posts' });
@@ -106,7 +106,7 @@ router.get('/all/', async (req, res) => {
 });
 
 //all posts for a userid
-router.get('/all/:userid', async (req, res) => {
+router.get('/userTotal/:userid', async (req, res) => {
     try {
         const post = await Post.countDocuments({ user: req.params.userid })
         if (!post) return res.status(400).json({ msg: 'there is no posts for this user' });
