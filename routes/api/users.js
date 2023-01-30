@@ -18,7 +18,8 @@ const config = require('config');
 router.post('/', [
     check('name', 'name is required').not().isEmpty(),
     check('email', 'email should be correct').isEmail(),
-    check('password', 'password must be at least 8 characters,contains uppercase,numbers and special charachter').matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, "i"),
+    check('password', 'password must be at least 8 characters,contains uppercase,numbers and special charachter')
+        .matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
 ],
     async (req, res) => {
 
@@ -29,6 +30,7 @@ router.post('/', [
         }
 
         const { name, email, password } = req.body;
+
         try {
             // see if user exist
             let user = await User.findOne({ email });
